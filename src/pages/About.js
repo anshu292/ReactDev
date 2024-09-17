@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function About(){
 
+    useEffect(()=>{
+        getData(1);
+        
+    },[]) //can 
     const[userList, setUserList]=useState([]);
 
     const getData =async(pageNo)=> {

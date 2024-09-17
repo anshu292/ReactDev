@@ -1,9 +1,11 @@
 import { useRef ,useState} from "react"
+import './Login.css';
 
 export default function Login(){
     const[res, setRes]= useState("");
     const[name,setName]= useState("");
     const [pwd,setPwd]= useState("");
+    const [loginStatus,setLoginStatus]=useState();
 
     // const nameRef= useRef();
     // const pwdRef= useRef();
@@ -27,10 +29,12 @@ export default function Login(){
         let json=await response.json();
         console.log(json);
         setRes(json['token']);
-  }else{
-    setRes("login failure!!");
+        setLoginStatus(true);
 
-  }
+  }else{
+    setLoginStatus(false);
+    setRes("login failure!!");
+}
 }
     return(
         <>
@@ -47,15 +51,15 @@ export default function Login(){
 
         </div> */}
           <div>
-            <input  onChange={(e)=>setName(e.target.value)} type="text" placeholder="Enter email"/>
+            <input   className="input" onChange={(e)=>setName(e.target.value)} type="text" placeholder="Enter email"/>
             
         </div>
         <div>
-            <input  onChange={(e)=>setPwd(e.target.value)} type="Password" placeholder="Enter password"/>
+            <input className="input" onChange={(e)=>setPwd(e.target.value)} type="Password" placeholder="Enter password"/>
 
         </div>
         <div>
-            <input type="button" onClick={()=> apiCall()} value="Login"/>
+            <input className="input" type="button" onClick={()=> apiCall()} value="Login"/>
 
         </div>
         <div>
@@ -63,10 +67,7 @@ export default function Login(){
             Token
             </h1>
         </div>
-        <h1>
-      
-       {res}
-     </h1>
+        <h1 className={loginStatus?'success':'failure'}>{res}</h1>
         </>
     )
 
