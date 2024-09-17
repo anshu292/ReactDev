@@ -4,8 +4,8 @@ export default function About(){
 
     useEffect(()=>{
         getData(1);
-        
-    },[]) //can 
+
+    },[]) //can be executed once during the page loads
     const[userList, setUserList]=useState([]);
 
     const getData =async(pageNo)=> {
@@ -15,9 +15,7 @@ export default function About(){
         console.log(json);
     
         setUserList(json['data']);
-
-
-    }
+}
    const  changepageNo=(val)=>{
         console.log(val);
         getData(val);
@@ -25,8 +23,6 @@ export default function About(){
     }
     return (
     <>
-
-
     <button onClick={()=>getData('1')}>CLick to get user list</button>
         <select onChange={(e)=>changepageNo(e.target.value )}>
             <option value="1">Page 1</option>

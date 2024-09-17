@@ -1,74 +1,74 @@
-import { useRef ,useState} from "react"
-import './Login.css';
+import { useState } from "react";
+import './Login.css'; // Ensure that you have the CSS file for styling the success/failure classes
 
-export default function Login(){
-    const[res, setRes]= useState("");
-    const[name,setName]= useState("");
-    const [pwd,setPwd]= useState("");
-    const [loginStatus,setLoginStatus]=useState();
+export default function Login() {
+  const [res, setRes] = useState(""); // Stores response message or token
+  const [name, setName] = useState(""); // Stores the email entered by the user
+  const [pwd, setPwd] = useState(""); // Stores the password entered by the user
+  const [loginStatus, setLoginStatus] = useState(null); // Tracks login success/failure
 
-    // const nameRef= useRef();
-    // const pwdRef= useRef();
+  const apiCall = async () => {
+    // Check if email and password are entered
+    if (!name) {
+      setRes("Email field is empty");
+      setLoginStatus(false);
+      return;
+    }
+    if (!pwd) {
+      setRes("Password field is empty");
+      setLoginStatus(false);
+      return;
+    }
 
-    const apiCall=async()=>{
-        // let data={
-        //     // "email": nameRef.current.value,
-        //     // "password": pwdRef.current.value
-        // }
-        let data={
-            "email":name,
-            "password":pwd
-        }
-      let response=  await fetch("https://reqres.in/api/login",{
-        method:"post",
-        body:JSON.stringify(data),
-        headers:{"content-type":"application/json"}
-    })
-    if(response.ok){
-        
-        let json=await response.json();
-        console.log(json);
-        setRes(json['token']);
-        setLoginStatus(true);
+    // Prepare data for the login request
+    let data = {
+      "email": name,
+      "password": pwd
+    };
 
-  }else{
-    setLoginStatus(false);
-    setRes("login failure!!");
-}
-}
-    return(
-        <>
-        {/* <div>
-            <input  ref={nameRef} type="text" placeholder="Enter email"/>
-            
-        </div>
-        <div>
-            <input  ref={pwdRef} type="Password" placeholder="Enter password"/>
+    // Make the API call to the login endpoint
+    let response = await fetch("https://reqres.in/api/login", {
+      method: "post",
+      body: JSON.stringify(data),
+      headers: { "content-type": "application/json" }
+    });
 
-        </div>
-        <div>
-            <input type="button" onClick={()=> apiCall()} value="Login"/>
+    if (response.ok) {
+      let json = await response.json();
+      console.log(json);
+      setRes("Token: " + json['token']); // Display the token in the response
+      setLoginStatus(true); // Set loginStatus to true on success
+    } else {
+      setLoginStatus(false); // Set loginStatus to false on failure
+      setRes("Login failure!!");
+    }
+  };
 
-        </div> */}
-          <div>
-            <input   className="input" onChange={(e)=>setName(e.target.value)} type="text" placeholder="Enter email"/>
-            
-        </div>
-        <div>
-            <input className="input" onChange={(e)=>setPwd(e.target.value)} type="Password" placeholder="Enter password"/>
-
-        </div>
-        <div>
-            <input className="input" type="button" onClick={()=> apiCall()} value="Login"/>
-
-        </div>
-        <div>
-            <h1>
-            Token
-            </h1>
-        </div>
-        <h1 className={loginStatus?'success':'failure'}>{res}</h1>
-        </>
-    )
-
+  return (
+    <>
+      <div>
+        <input
+          className="input"
+          onChange={(e) => setName(e.target.value)}
+          type="text"
+          placeholder="Enter email"
+        />
+      </div>
+      <div>
+        <input
+          className="input"
+          onChange={(e) => setPwd(e.target.value)}
+          type="password"
+          placeholder="Enter password"
+        />
+      </div>
+      <div>
+        <input className="input" type="button" onClick={() => apiCall()} value="Login" />
+      </div>
+      <div>
+        <h1>Token</h1>
+      </div>
+      <h1 className={loginStatus === true ? 'success' : loginStatus === false ? 'failure' : ''}>{res}</h1>
+    </>
+  );
 }
