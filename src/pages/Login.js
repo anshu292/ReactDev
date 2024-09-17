@@ -1,24 +1,33 @@
-import { useRef } from "react"
+import { useRef ,useState} from "react"
 
 export default function Login(){
+    const[res, setRes]= useState("");
+    // const[name,setName]= useState("");
+    // const [pwd,setPwd]= useState("");
+
     const nameRef= useRef();
     const pwdRef= useRef();
 
     const apiCall=async()=>{
         let data={
-            "email": "eve.holt@reqres.in",
-            "password": "cityslicka"
+            "email": nameRef.current.value,
+            "password": pwdRef.current.value
         }
-      let res=  await fetch("https://reqres.in/api/login",{
+      let response=  await fetch("https://reqres.in/api/login",{
         method:"post",
         body:JSON.stringify(data),
         headers:{"content-type":"application/json"}
     })
+    if(response.ok){
         
-        let json=await res.json();
+        let json=await response.json();
         console.log(json);
+        setRes(json['token']);
+  }else{
+    setRes("login failure!!");
 
-    }
+  }
+}
     return(
         <>
         <div>
@@ -33,7 +42,15 @@ export default function Login(){
             <input type="button" onClick={()=> apiCall()} value="Login"/>
 
         </div>
-        
+        <div>
+            <h1>
+            Token
+            </h1>
+        </div>
+        <h1>
+      
+       {res}
+     </h1>
         </>
     )
 

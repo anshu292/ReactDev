@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Login from "./Login";
 
 export default function About(){
 
@@ -22,8 +21,8 @@ export default function About(){
     }
     return (
     <>
-    <Login/>
-    
+
+
     <button onClick={()=>getData('1')}>CLick to get user list</button>
         <select onChange={(e)=>changepageNo(e.target.value )}>
             <option value="1">Page 1</option>
